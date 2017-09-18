@@ -30,7 +30,7 @@ var loadScript = function loadScript(url) {
       var head = document.getElementsByTagName('head')[0];
       var script = document.createElement('script');
       script.type = 'text/javascript';
-      script.src = '/' + url.replace(/^\//, '');
+      script.src = url.replace(/^\//, '');
       script.onreadystatechange = resolve(script);
       script.onload = resolve(script);
       head.appendChild(script);
