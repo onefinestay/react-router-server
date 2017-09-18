@@ -10,16 +10,18 @@ var _validateStats2 = _interopRequireDefault(_validateStats);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function parseWebpack(module) {
+function parseWebpack(module, publicPath) {
   return {
     id: module.id,
-    files: module.files
+    files: module.files.map(function (item) {
+      return '' + publicPath + item;
+    })
   };
 }
-function parseSystemImportTransformer(module) {
+function parseSystemImportTransformer(module, publicPath) {
   return {
     id: module.id,
-    files: [module.name]
+    files: ['' + publicPath + module.name]
   };
 }
 
@@ -40,10 +42,10 @@ function findModule(module, chunks) {
 function extractModule(module, stats) {
   if (module.info.type === 'webpack') {
     var match = findModule(module, stats.chunks);
-    return match ? parseWebpack(match) : match;
+    return match ? parseWebpack(match, stats.publicPath || '') : match;
   } else if (module.info.type === 'systemImportTransformer') {
     var _match2 = findModule(module, stats.chunks);
-    return _match2 ? parseSystemImportTransformer(_match2) : _match2;
+    return _match2 ? parseSystemImportTransformer(_match2, stats.publicPath || '') : _match2;
   }
 }
 
